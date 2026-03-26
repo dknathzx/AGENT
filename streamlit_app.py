@@ -1,7 +1,7 @@
 """
 streamlit_app.py
 ───────────────────────────────────────────────────────────────
-Lunar — KONE IT & Workplace Support Assistant
+Genie — KONE IT & Workplace Support Assistant
 Beautiful Streamlit UI for the Agentic AI Chatbot
 ───────────────────────────────────────────────────────────────
 """
@@ -26,8 +26,8 @@ SNOW_PASSWORD    = os.getenv("SNOW_PASSWORD", "")
 
 # ── Page Config ───────────────────────────────────────────────
 st.set_page_config(
-    page_title="Lunar — KONE Support",
-    page_icon="",
+    page_title="Genie — KONE Support",
+    page_icon="🧞",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -42,7 +42,6 @@ html, body, [class*="css"] {
     font-family: 'DM Sans', sans-serif;
     background-color: #0a0f1e;
     color: #e8eaf6;
-    overflow: hidden;
 }
 
 /* ── Hide Streamlit defaults ── */
@@ -118,7 +117,7 @@ html, body, [class*="css"] {
 .chat-area {
     flex: 1;
     overflow-y: auto;
-    padding: 0.5rem 3rem;
+    padding: 2rem 3rem;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -208,10 +207,10 @@ html, body, [class*="css"] {
 
 /* ── Streamlit input overrides ── */
 .stTextInput input {
-    background: #000000 !important;
+    background: rgba(255,255,255,0.04) !important;
     border: 1px solid rgba(99, 179, 237, 0.25) !important;
     border-radius: 12px !important;
-    color: #ffffff !important;
+    color: #e2e8f0 !important;
     padding: 0.85rem 1.25rem !important;
     font-family: 'DM Sans', sans-serif !important;
     font-size: 0.95rem !important;
@@ -365,7 +364,7 @@ def format_context(similar: list) -> str:
 Past Incident #{i}:
   Number     : {inc.get('number', 'N/A')}
   Summary    : {inc.get('summary', 'N/A')}
-  Category   : {inc.get('category', 'N/A')} -> {inc.get('sub_category', 'N/A')}
+  Category   : {inc.get('category', 'N/A')} → {inc.get('sub_category', 'N/A')}
   Priority   : {inc.get('priority', 'N/A')}
   Root Cause : {inc.get('root_cause', 'N/A')}
   Team       : {inc.get('assigned_team', 'N/A')}
@@ -376,7 +375,7 @@ Past Incident #{i}:
 
 
 # ── System prompt ─────────────────────────────────────────────
-SYSTEM_PROMPT = """You are Lunar — an expert AI assistant for IT and workplace support at KONE Corporation.
+SYSTEM_PROMPT = """You are Genie — an expert AI assistant for IT and workplace support at KONE Corporation.
 You are highly intelligent, empathetic, and domain-specific.
 
 YOUR PERSONALITY:
@@ -396,19 +395,19 @@ YOUR CAPABILITIES:
 
 RESPONSE FORMAT — always structure your answers like this:
 
-Understanding Your Issue
+🔍 **Understanding Your Issue**
 [Brief restatement of what you understood]
 
-Self-Help Steps (Try these first)
+💡 **Self-Help Steps** (Try these first)
 [Numbered steps the employee can try themselves]
 
-Root Cause Analysis
+🧠 **Root Cause Analysis**
 [Probable reason this is happening]
 
-If Issue Persists — Route To
+👥 **If Issue Persists — Route To**
 [Team name and why]
 
-Create a Ticket?
+🎫 **Create a Ticket?**
 [Ask if they want you to create a ServiceNow ticket]
 
 IMPORTANT RULES:
@@ -420,8 +419,8 @@ IMPORTANT RULES:
 """
 
 
-# ── Ask Lunar ─────────────────────────────────────────────────
-def ask_lunar(user_message: str, history: list, context: str) -> str:
+# ── Ask Genie ─────────────────────────────────────────────────
+def ask_genie(user_message: str, history: list, context: str) -> str:
     messages = [{
         "role": "system",
         "content": SYSTEM_PROMPT + f"\n\nRELEVANT PAST INCIDENTS:\n{context}"
@@ -480,7 +479,7 @@ with st.sidebar:
         <p style="font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800;
                   background: linear-gradient(135deg, #63b3ed, #90cdf4);
                   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-                  margin: 0 0 0.2rem 0;">Lunar</p>
+                  margin: 0 0 0.2rem 0;">🧞 Genie</p>
         <p style="font-size: 0.75rem; color: #4a5568; margin: 0;">KONE IT Support Assistant</p>
     </div>
     """, unsafe_allow_html=True)
@@ -500,21 +499,21 @@ with st.sidebar:
     st.markdown('<br><div class="sidebar-label">Quick Questions</div>', unsafe_allow_html=True)
 
     quick_questions = [
-        "My account is locked",
-        "WiFi not connecting",
-        "Need a new laptop",
-        "Outlook not working",
-        "Need SAP access",
-        "Printer offline",
+        "🔒 My account is locked",
+        "📶 WiFi not connecting",
+        "💻 Need a new laptop",
+        "📧 Outlook not working",
+        "🔑 Need SAP access",
+        "🖨️ Printer offline",
     ]
 
     for q in quick_questions:
         if st.button(q, key=f"quick_{q}"):
-            st.session_state["quick_input"] = q
+            st.session_state["quick_input"] = q.split(" ", 1)[1]
             st.rerun()
 
     st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("Clear Conversation"):
+    if st.button("🗑️ Clear Conversation"):
         st.session_state.messages = []
         st.session_state.history = []
         st.session_state.ticket_created = None
@@ -525,7 +524,7 @@ with st.sidebar:
     <br>
     <div style="font-size: 0.7rem; color: #2d3748; text-align: center;">
         Model: {LLM_MODEL}<br>
-        Running 100% locally
+        Running 100% locally 🔒
     </div>
     """, unsafe_allow_html=True)
 
@@ -538,7 +537,7 @@ st.markdown("""
 <div class="genie-header">
     <div class="status-dot"></div>
     <div>
-        <p class="genie-title">Lunar</p>
+        <p class="genie-title">Genie</p>
         <p class="genie-subtitle">KONE IT & Workplace Support · Powered by local AI</p>
     </div>
 </div>
@@ -550,11 +549,12 @@ chat_container = st.container()
 with chat_container:
     if not st.session_state.messages:
         st.markdown("""
-        <div style="text-align: center; padding: 0.5rem 2rem; color: #2d3748;">
-            <p style="font-family: 'Syne', sans-serif; font-size: 1.1rem; color: #4a5568; margin-bottom: 0.3rem;">
-                Hi! I'm Lunar, your KONE support assistant.
+        <div style="text-align: center; padding: 4rem 2rem; color: #2d3748;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🧞</div>
+            <p style="font-family: 'Syne', sans-serif; font-size: 1.1rem; color: #4a5568; margin-bottom: 0.5rem;">
+                Hi! I'm Genie, your KONE support assistant.
             </p>
-            <p style="font-size: 0.85rem; color: #2d3748; margin: 0;">
+            <p style="font-size: 0.85rem; color: #2d3748;">
                 Describe your IT issue or service request and I'll help you resolve it.
             </p>
         </div>
@@ -566,14 +566,14 @@ with chat_container:
             if role == "user":
                 st.markdown(f"""
                 <div class="message-row user">
-                    <div class="avatar user">U</div>
+                    <div class="avatar user">👤</div>
                     <div class="bubble user">{content}</div>
                 </div>
                 """, unsafe_allow_html=True)
             else:
                 st.markdown(f"""
                 <div class="message-row">
-                    <div class="avatar genie">L</div>
+                    <div class="avatar genie">🧞</div>
                     <div class="bubble genie">{content}</div>
                 </div>
                 """, unsafe_allow_html=True)
@@ -581,7 +581,7 @@ with chat_container:
         if st.session_state.ticket_created:
             st.markdown(f"""
             <div style="text-align:center; margin-top: 1rem;">
-                <span class="ticket-badge">Ticket Created: {st.session_state.ticket_created}</span>
+                <span class="ticket-badge">✅ Ticket Created: {st.session_state.ticket_created}</span>
             </div>
             """, unsafe_allow_html=True)
 
@@ -596,16 +596,16 @@ with col1:
     user_input = st.text_input(
         "",
         value=default_val,
-        placeholder="Describe your issue or request... (e.g. My VPN is not connecting)",
+        placeholder="Describe your issue or request... (e.g. 'My VPN is not connecting')",
         key="chat_input",
         label_visibility="collapsed"
     )
 
 with col2:
-    send_clicked = st.button("Send", use_container_width=True)
+    send_clicked = st.button("Send 🧞", use_container_width=True)
 
 with col3:
-    ticket_clicked = st.button("Create Ticket", use_container_width=True)
+    ticket_clicked = st.button("🎫 Ticket", use_container_width=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
 
@@ -624,9 +624,9 @@ if (send_clicked or user_input) and user_input.strip():
     context = format_context(similar)
     st.session_state.last_context = context
 
-    # Get Lunar response
-    with st.spinner("Lunar is thinking..."):
-        response = ask_lunar(query, st.session_state.history[:-1], context)
+    # Get Genie response
+    with st.spinner("🧞 Genie is thinking..."):
+        response = ask_genie(query, st.session_state.history[:-1], context)
 
     # Add assistant message
     st.session_state.messages.append({"role": "assistant", "content": response})
@@ -642,16 +642,16 @@ if ticket_clicked:
             (m["content"] for m in reversed(st.session_state.messages) if m["role"] == "user"),
             "Support ticket"
         )
-        with st.spinner("Creating ServiceNow ticket..."):
+        with st.spinner("🎫 Creating ServiceNow ticket..."):
             result = create_ticket(
                 short_desc=last_user[:100],
-                description=f"Ticket created via Lunar.\n\nIssue: {last_user}\n\nContext: {st.session_state.last_context[:500]}"
+                description=f"Ticket created via Genie.\n\nIssue: {last_user}\n\nContext: {st.session_state.last_context[:500]}"
             )
         if result["success"]:
             st.session_state.ticket_created = result["number"]
-            st.success(f"Ticket created: {result['number']}")
+            st.success(f"✅ Ticket created: {result['number']}")
         else:
-            st.error(f"{result['message']}")
+            st.error(f"❌ {result['message']}")
         st.rerun()
     else:
         st.warning("Please describe your issue first!")

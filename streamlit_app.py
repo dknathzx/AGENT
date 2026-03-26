@@ -42,6 +42,7 @@ html, body, [class*="css"] {
     font-family: 'DM Sans', sans-serif;
     background-color: #0a0f1e;
     color: #e8eaf6;
+    overflow: hidden;
 }
 
 /* ── Hide Streamlit defaults ── */
@@ -117,7 +118,7 @@ html, body, [class*="css"] {
 .chat-area {
     flex: 1;
     overflow-y: auto;
-    padding: 2rem 3rem;
+    padding: 0.5rem 3rem;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -549,12 +550,11 @@ chat_container = st.container()
 with chat_container:
     if not st.session_state.messages:
         st.markdown("""
-        <div style="text-align: center; padding: 4rem 2rem; color: #2d3748;">
-            <div style="font-size: 3rem; margin-bottom: 1rem;"></div>
-            <p style="font-family: 'Syne', sans-serif; font-size: 1.1rem; color: #4a5568; margin-bottom: 0.5rem;">
+        <div style="text-align: center; padding: 0.5rem 2rem; color: #2d3748;">
+            <p style="font-family: 'Syne', sans-serif; font-size: 1.1rem; color: #4a5568; margin-bottom: 0.3rem;">
                 Hi! I'm Lunar, your KONE support assistant.
             </p>
-            <p style="font-size: 0.85rem; color: #2d3748;">
+            <p style="font-size: 0.85rem; color: #2d3748; margin: 0;">
                 Describe your IT issue or service request and I'll help you resolve it.
             </p>
         </div>
